@@ -20,6 +20,9 @@ var express = require('express'),
 
 var NODE_ENV;
 var packagejson = require('./package');
+
+console.log("NODE_ENV : " + process.env.NODE_ENV);
+
 if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "live"){
     settings.NODE_ENV = process.env.NODE_ENV;
     settings.appName = packagejson.name;
@@ -106,7 +109,10 @@ site.get('/', routes.index);
 site.get('/developers/', routes.developers);
 site.post('/rpc/setLink', routes.setLink);
 site.post('/rpc/getLink', routes.getLink);
-site.get(/^\/([a-zA-Z0-9]{6,32})$/, routes.navLink);
+site.post('/api/links', routes.setLink);
+site.get('/api/links/:linkHash', routes.getLinkInfo);
+//site.get(/^\/([a-zA-Z0-9]{6,32})$/, routes.navLink);
+site.get('/:linkHash', routes.navLink);
 //Catch all other attempted routes and throw them a 404!
 site.all('*', function(req, resp, next){
     next({name: "NotFound", "message": "Oops! The page you requested doesn't exist","status": 404});

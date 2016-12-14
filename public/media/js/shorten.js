@@ -11,7 +11,7 @@ $(document).ready(function(){
         if (isURL($("#originalURL").val())){
             var encodedUrl = (escape($("#originalURL").val())).replace(/\+/g, "%20");
             $.ajax({
-                    url: "/rpc/setLink",
+                    url: "/api/links",
                     type: "json",
                     method: "post",
                     data: "originalURL="+encodedUrl,

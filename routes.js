@@ -38,7 +38,7 @@ Routes.prototype.developers = function (req, res){
 *    ALSO: Logs link navigation for stats
 */
 Routes.prototype.navLink = function (req, res){
-    var linkHash = req.params[0];
+    var linkHash = req.params.linkHash;
     //Is the linkHash ONLY alphanumeric and between 6-32 characters?
     if (shorten.isValidLinkHash(linkHash)){
         //Gather and clean the data required for logging this hash
@@ -152,6 +152,37 @@ Routes.prototype.getLink = function (req, res){
 		res.json(errorResponse);
 	}
 };
+
+/*
+*
+* Get info about a shortened link
+*    Accepts a known short link - eg ("http://kish.cm/api/links/yyyxxx")
+*     Returns a json object with detailed stats and information
+*
+*/
+Routes.prototype.getLinkInfo = function (req, res){
+	var shortenedURL = req.params.linkHash;
+	if (shorten.isValidLinkHash(shortenedURL)){
+        //Get stats
+		shorten.shortenedURLStats(shortenedURL, function(linkStats){
+            //console.log("link stats");
+            //console.log(linkStats);
+			res.json(linkStats);
+		});
+	}else{
+		//404 - no shortlink found with that hash
+        var errorResponse ={'originalURL': null,
+                            'linkHash': null,
+                            'timesUsed': null,
+                            'lastUse': null,
+                            'topReferrals': {},
+                            'topUserAgents':{},
+                            'error': 'Not a Kish.cm URL, or not a valid shortened hash'
+                            };
+		res.json(errorResponse);
+	}
+};
+
 
 /**
 /* Error handler

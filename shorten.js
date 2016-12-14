@@ -1,8 +1,11 @@
 /* Kish.cm Node.js powered URL Shortener */
 var app = false;
+var log = false;
+
 var Shorten = function(parentapp){
     this.app = parentapp;
     app = parentapp;
+    log = app.get('bunyan');
     var settings = require('./settings').shorten_settings;
     if (this.app === undefined){ //for tests
         //Assume a dev server
@@ -65,7 +68,7 @@ Shorten.prototype.linkHashLookUp = function(linkHash, userInfo, callback){
 Shorten.prototype.addNewShortenLink = function(originalURL, callback){
     var that = this; //Grab this context for after we make a DB query
     var mongoose = app.get('mongoose');
-
+    
     var newHash = that.genHash(function(newHash){
         var dbCursor = mongoose.model('LinkMaps');
         dbCursor = new dbCursor({linkDestination: originalURL, linkHash: newHash, timestamp: new Date() });
@@ -127,6 +130,7 @@ Shorten.prototype.originalURLLookUp = function (originalURL, callback){
 */
 Shorten.prototype.shortenedURLStats = function(shortenedURL, callback) {
     var that = this; //We need this context deep in callback hell. I feel like I'm doing something wrong...
+    log.info("shortenedUrl = " + shortenedURL);
     var alreadyShortTest = new RegExp("^http:\/\/" + this.app.settings.domain + "\/[a-zA-Z0-9]{6,32}$");
     if (alreadyShortTest.test(shortenedURL)){
         var shortenedURLStats = {  'originalURL': null,
@@ -318,6 +322,8 @@ Shorten.prototype.genHash = function(callback){
 *   Returns: Boolean `True` if linkHash is ONLY alphanumeric and between 6-32 characters
 */
 Shorten.prototype.isValidLinkHash = function(linkHash){
+    // site.get(/^\/([a-zA-Z0-9]{6,32})$/, routes.navLink);
+    // why this regex is different ???
     var linkHashRegex = /^[a-z0-9]{6,32}$/i;
     return linkHashRegex.test(linkHash);
 };
