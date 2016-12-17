@@ -93,7 +93,7 @@ if (settings.NODE_ENV === "dev"){
 if (settings.NODE_ENV === "live"){
     //Set your domain name for the shortener here
     site.set('domain', settings.live_domain);
-    mongoose.connect(settings.live_mongodb_uri === '' ? process.env.MONGOLAB_URI : settings.live_mongodb_uri);
+    mongoose.connect(settings.live_mongodb_uri === '' ? process.env.MONGODB_URI : settings.live_mongodb_uri);
     mongoose.model('LinkMaps', models.LinkMaps, 'linkmaps'); //models is pulled in from settings.json
     site.set('mongoose', mongoose);
 }
