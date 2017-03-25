@@ -109,6 +109,7 @@ site.get('/', routes.index);
 site.get('/developers/', routes.developers);
 site.post('/rpc/setLink', routes.setLink);
 site.post('/rpc/getLink', routes.getLink);
+site.get('/api/links');
 site.post('/api/links', routes.setLink);
 site.get('/api/links/:linkHash', routes.getLinkInfo);
 //site.get(/^\/([a-zA-Z0-9]{6,32})$/, routes.navLink);

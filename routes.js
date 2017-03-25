@@ -153,6 +153,11 @@ Routes.prototype.getLink = function (req, res){
 	}
 };
 
+
+Routes.prototype.getLinks = function (req, res) {
+
+};
+
 /*
 *
 * Get info about a shortened link
@@ -177,7 +182,7 @@ Routes.prototype.getLinkInfo = function (req, res){
                             'lastUse': null,
                             'topReferrals': {},
                             'topUserAgents':{},
-                            'error': 'Not a Kish.cm URL, or not a valid shortened hash'
+                            'error': 'Not a valid shortened hash'
                             };
 		res.json(errorResponse);
 	}
